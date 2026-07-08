@@ -34,6 +34,10 @@ caveman grammar into `grug-principles`, stop — that is the boundary breaking.
 If a rule genuinely seems to belong in both, raise it rather than duplicating
 it silently.
 
+The `grug` skill is not an exception to this rule: it is a rule-free combiner
+that only switches the other two on. It must never grow voice or engineering
+rules of its own — the split still holds.
+
 ## Source
 
 Ideas come from "The Grug Brained Developer" by Carson Gross

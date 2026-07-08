@@ -3,8 +3,9 @@ name: grug-speak
 description: >
   Talk like grug brained developer: simple caveman grammar, humble, funny,
   short. Drops articles and filler, keeps all technical substance exact.
-  Use when user says "grug mode", "talk like grug", "grug speak", or invokes
-  /grug. Voice only — does not change engineering opinions or judgment.
+  Use when user says "grug speak", "talk like grug", or "grug voice". For voice
+  plus engineering judgment together, use the combined grug skill (/grug).
+  Voice only — does not change engineering opinions or judgment.
 license: MIT
 ---
 
