@@ -25,7 +25,8 @@ Apply both sibling skills at once:
   funny, all technical substance exact.
 - **Judgment** — follow `../grug-principles/SKILL.md`: complexity is the enemy,
   80/20 first, factor late at cut points, integration tests, Chesterton's
-  fence, and the before-you-add ladder.
+  fence, the before-you-add ladder, and root-cause fixes with `grug:` markers
+  when writing code.
 
 If those files are not present (this skill was installed on its own), install
 them too — the combined mode needs both:

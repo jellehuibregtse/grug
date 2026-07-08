@@ -40,6 +40,71 @@ consult it for thorough design reviews.
 - **When to apply:** deadlines, gold-plated requirements, "make it configurable
   for every possible future case."
 
+## Writing code — the ladder
+
+- The ladder in `SKILL.md` (need to exist → already in the codebase →
+  standard library → native platform → installed dependency → one line →
+  minimum code) is a write-time reflex as much as a review lens: climb it
+  before every addition and stop at the first rung that settles it.
+- Rung two is where the most waste happens: search the codebase before
+  writing — the helper, util, type, or pattern you are about to write often
+  already lives a few files away, and re-implementing it is the most common
+  failure.
+- Native platform beats a dependency: a native date input over a picker
+  library, CSS over JavaScript, a database constraint over app-level
+  validation. The platform's version is already tested, documented, and
+  maintained by someone else.
+- Never add a new dependency for what a few lines or an installed dependency
+  can do — a dependency is a standing complexity cost, not a one-time one.
+- The ladder runs after understanding, never instead of it: read the task and
+  every file the change touches, trace the real flow end to end, then climb.
+  A small diff in the wrong place is a second bug dressed as simplicity.
+- **When to apply:** every time you are about to write new code — a feature,
+  a utility, a component, a fix.
+
+## Bug fixes — root cause, not symptom
+
+- A bug report names a symptom on one path; the defect usually lives in
+  shared code with more callers than the ticket mentions.
+- Before editing, find every caller of the function you are about to touch —
+  then decide where the fix belongs.
+- One guard in the shared function is a smaller diff than a guard in every
+  caller: the minimal fix and the root-cause fix are the same fix.
+- Patching only the reported path leaves every sibling caller still broken
+  and invites the same ticket back next week.
+- Found the root cause? Write the regression test that reproduces it first,
+  then fix (see Testing).
+- **When to apply:** every bug fix, especially "just add a nil check here"
+  moments.
+
+## Marker comments — deliberate simplification
+
+- A shortcut with a known ceiling gets a `grug:` comment naming the ceiling
+  and the upgrade path, e.g. `# grug: global lock fine at this volume, move
+  to per-account locks if throughput matters`.
+- The comment traps the complexity trade-off where the next reader can see
+  it — the complexity demon pinned in place instead of hiding in the diff.
+- It is also a Chesterton's fence sign planted in advance: the next developer
+  knows the simple version is deliberate, not ignorance, and knows exactly
+  when to replace it.
+- Reserve it for real ceilings (known scale limit, naive heuristic, edge case
+  deliberately skipped) — a `grug:` comment on ordinary code is noise.
+- **When to apply:** whenever you knowingly ship the simple version of
+  something with a known upgrade path.
+
+## Output discipline when producing code
+
+- Code first; prose after. Then at most a few short lines: what was
+  deliberately skipped, and when adding it becomes worth it.
+- No design essay around a ten-line diff — if the explanation outgrows the
+  code, cut the explanation, not the code.
+- A large or vague request gets the 80/20 build plus the question in the same
+  response ("Built X; Y already covers the rest. Need full X? Say so."), not
+  a stall and not gold-plated everything.
+- Explanation the user explicitly asked for — a report, a walkthrough — is
+  not padding; give it in full. The discipline targets unrequested prose.
+- **When to apply:** every response that ships code to a user.
+
 ## Factoring and cut points
 
 - Do not factor early. Early in a system the true shape is unknown, and

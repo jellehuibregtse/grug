@@ -1,12 +1,15 @@
 ---
 name: grug-principles
 description: >
-  Apply grug brained engineering philosophy to design, code review, and
-  planning: fight complexity, prefer 80/20 solutions, factor late at natural
-  cut points, favor integration tests, respect Chesterton's fence, balance
-  DRY against simplicity. Use when reviewing code or PRs, evaluating designs
-  or abstractions, or when user says "grug review", "grug principles", or
-  "would grug approve". Professional voice — does not change how the agent talks.
+  Apply grug brained engineering philosophy to design, review, and writing
+  code: fight complexity, prefer 80/20 solutions, factor late at natural cut
+  points, favor integration tests, respect Chesterton's fence, balance DRY
+  against simplicity, reuse and standard library before new code, native
+  platform before new dependencies, fix root causes over symptoms. Use when
+  reviewing code or PRs, evaluating designs or abstractions, writing, adding,
+  refactoring, or fixing code, choosing libraries or dependencies, or when
+  user says "grug review", "grug principles", or "would grug approve".
+  Professional voice — does not change how the agent talks.
 license: MIT
 ---
 
@@ -14,8 +17,8 @@ license: MIT
 
 An engineering decision layer distilled from "The Grug Brained Developer"
 (Carson Gross, https://grugbrain.dev/). Applied in normal professional
-English. It changes *what* you recommend and flag, never *how* you talk. For
-the caveman voice, combine with the separate `grug-speak` skill.
+English. It changes *what* you recommend, flag, and write, never *how* you
+talk. For the caveman voice, combine with the separate `grug-speak` skill.
 
 ## Prime directive
 
@@ -28,16 +31,37 @@ gets in.
 
 ## Before you add anything (walk in order, stop when one settles it)
 
+The ladder serves review and writing alike, and runs after understanding,
+not instead of it: read the task and the code it touches, trace the real
+flow, then climb — the smallest change in the wrong place is a second bug.
+
 1. Does it need to exist at all? The feature not built cannot break — say no
-   first.
-2. Does something already do this (codebase, standard library, a dependency
-   you already have)? Reuse beats writing.
+   first, in one line.
+2. Does something already do this? Look before writing, in order: this
+   codebase (a helper or pattern a few files away — rewriting what exists is
+   the most common failure), the standard library, a native platform feature
+   (a native date input beats a picker dependency, CSS beats JavaScript, a
+   database constraint beats app-level validation), an installed dependency.
+   Never add a new dependency for what a few lines can do.
 3. Is there an 80/20 version — most of the value for a fraction of the code?
    Ship that, and name the scope you cut.
 4. Does it really need an abstraction yet, or are you guessing at a shape that
    has not emerged? Factor at a cut point, not before.
 
-Only past all four: write the smallest thing that works.
+Only past all four: the smallest thing that works, one line if one line does.
+
+## When writing or fixing code
+
+- **Fix the root cause, not the symptom.** Before editing, check every caller
+  of the function you are touching: one guard in the shared function beats a
+  guard per caller — the minimal fix and the root-cause fix are the same fix,
+  and patching only the reported path leaves sibling callers broken.
+- **Mark deliberate shortcuts with a `grug:` comment** naming ceiling and
+  upgrade path — `# grug: global lock fine at this volume, move to
+  per-account locks if throughput matters`. It keeps the trade-off visible
+  and plants a Chesterton's fence sign: deliberate, and when to replace it.
+- **Code first, explanation short.** Then at most a few lines: what was
+  skipped, when to add it — if the explanation outgrows the code, cut it.
 
 ## When reviewing code or designs, actively flag
 
@@ -62,7 +86,9 @@ Only past all four: write the smallest thing that works.
 ## When proposing solutions
 
 - Reach for the 80/20 version first and **state the scope you cut**, so the
-  trade-off is a decision, not an accident.
+  trade-off is a decision, not an accident. Under a large or vague request,
+  ship the minimal version and question the rest in the same response —
+  "Built X; Y already covers the rest. Need full X? Say so." — never stall.
 - Prefer locality of behavior (code lives on the thing that does the thing)
   over ceremony-heavy separation that scatters one behavior across many files.
 - When disagreement is abstract, propose a working prototype or demo over an
@@ -88,10 +114,10 @@ optimization. Distrust the shaman who applies a rule because it is the rule.
 ## Full principle set
 
 For a thorough design review, consult `references/principles.md` — every theme
-from the essay restated as actionable heuristics with a one-line trigger for
-each. Rely on the summary above for quick judgments; open the reference when
-the review is deep or the topic (concurrency, logging, type systems, APIs,
-parsing, front end, and more) needs its own detail.
+from the essay restated as actionable heuristics, each with a one-line trigger.
+Rely on the summary above for quick judgments; open the reference when the
+topic (writing code, concurrency, logging, types, APIs, parsing, front end,
+and more) needs its own detail.
 
 ## Non-goal
 
