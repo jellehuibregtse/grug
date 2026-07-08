@@ -10,11 +10,11 @@ different job. so: two skill. keep them apart on purpose.
 
 ## the two skill
 
-| skill               | what it change                                                                                          | when grug reach for it                                               |
-|---------------------|---------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
-| **grug-speak**      | *how* agent talk — caveman voice, short, humble, funny. nothing else.                                   | want the voice, or want fewer token. no engineering opinion touched. |
-| **grug-principles** | *what* agent recommend — complexity-averse judgment for design and review. normal professional english. | design review, PR feedback, "would grug approve." no voice change.   |
-| **grug**            | *both* — turn on voice and judgment together, the full grugbrain. own no rule, just a switch.           | want the whole thing. say "grug mode" or /grug.                      |
+| skill               | what it change                                                                                                                              | when grug reach for it                                                                           |
+|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| **grug-speak**      | *how* agent talk — caveman voice, short, humble, funny. nothing else.                                                                       | want the voice, or want fewer token. no engineering opinion touched.                             |
+| **grug-principles** | *what* agent recommend and write — complexity-averse judgment for design, review, and code agent write itself. normal professional english. | design review, PR feedback, agent writing or fixing code, "would grug approve." no voice change. |
+| **grug**            | *both* — turn on voice and judgment together, the full grugbrain. own no rule, just a switch.                                               | want the whole thing. say "grug mode" or /grug.                                                  |
 
 **the split matter.** grug-speak never sneak in opinion about testing or
 abstraction. grug-principles never sneak in caveman grammar. run
@@ -70,12 +70,26 @@ then say "talk like grug" (voice), "grug review" (philosophy), or "grug mode" /
 > indirection until a second real case shows up. Recommend waiting for the cut
 > point to emerge."
 
+**grug-principles** — write-time, judgment for code agent write itself:
+
+> asked: "add a date picker to this React form."
+>
+> before: agent install picker library, write wrapper component, style it —
+> forty line and one new dependency.
+>
+> after: `<input type="date" />` and one line:
+> `// grug: native date input enough here, swap in picker library only if
+> design demand range select`. zero new dependency.
+
 ## thanks
 
 - ideas from ["The Grug Brained Developer"](https://grugbrain.dev/) by
   **Carson Gross**. grug just distill, grug not invent. go read the essay.
 - skill mechanics (persistence, auto-clarity escape hatch, boundaries, no
   self-reference) inspired by [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)
+  (MIT). grug study how it work, grug not copy the word.
+- write-time mechanic (the ladder rungs, root-cause fix, `grug:` marker
+  comment) adapted from [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail)
   (MIT). grug study how it work, grug not copy the word.
 - [Jordan](https://github.com/JordanFinch72) for the idea. grug just build it.
 
