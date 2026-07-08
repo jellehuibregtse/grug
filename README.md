@@ -14,11 +14,13 @@ different job. so: two skill. keep them apart on purpose.
 |---------------------|---------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
 | **grug-speak**      | *how* agent talk — caveman voice, short, humble, funny. nothing else.                                   | want the voice, or want fewer token. no engineering opinion touched. |
 | **grug-principles** | *what* agent recommend — complexity-averse judgment for design and review. normal professional english. | design review, PR feedback, "would grug approve." no voice change.   |
+| **grug**            | *both* — turn on voice and judgment together, the full grugbrain. own no rule, just a switch.           | want the whole thing. say "grug mode" or /grug.                      |
 
 **the split matter.** grug-speak never sneak in opinion about testing or
 abstraction. grug-principles never sneak in caveman grammar. run
 grug-principles alone for serious review. run grug-speak alone for fun or
-token saving. run both for full grugbrain. that the point.
+token saving. run both — or just /grug — for full grugbrain. that the point.
+the `grug` skill only combine the other two; it need both installed.
 
 ## install
 
@@ -27,21 +29,26 @@ with GitHub `gh skill` (need `gh` >= 2.90.0):
 ```sh
 gh skill install jellehuibregtse/grug/grug-speak
 gh skill install jellehuibregtse/grug/grug-principles
+gh skill install jellehuibregtse/grug/grug          # combined — needs the two above
 ```
 
-or vendor by hand — copy the skill folder into the consuming repo:
+or vendor by hand — copy the skill folder into the consuming repo (copy all of
+`skills/` if you want the combined `grug` switch):
 
 ```sh
 # Claude Code
 cp -r skills/grug-speak       /path/to/your-project/.claude/skills/
 cp -r skills/grug-principles  /path/to/your-project/.claude/skills/
+cp -r skills/grug             /path/to/your-project/.claude/skills/
 
 # agents that share .agents/skills/
 cp -r skills/grug-speak       /path/to/your-project/.agents/skills/
 cp -r skills/grug-principles  /path/to/your-project/.agents/skills/
+cp -r skills/grug             /path/to/your-project/.agents/skills/
 ```
 
-then say "grug mode" (voice), "grug review" (philosophy), or turn both on.
+then say "talk like grug" (voice), "grug review" (philosophy), or "grug mode" /
+/grug (both).
 
 ## what it look like
 
