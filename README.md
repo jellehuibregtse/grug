@@ -32,6 +32,16 @@ gh skill install jellehuibregtse/grug
 then say "talk like grug" (voice), "grug review" (philosophy), or "grug mode" /
 /grug (both).
 
+## make grug stick (Claude Code only)
+
+grug fade over long session, or after `/clear` or compaction. in Claude Code,
+grug fix this: two small hook re-inject grug rule at session start and every
+turn, so grug survive. opt-in — grug ask before touch your settings, never
+wire itself. once wired, presence of hook mean grug on by default every
+session; say `/grug off` to remove hook. need all three skill — grug,
+grug-speak, grug-principles — installed at same scope. everywhere else (Cursor,
+Copilot, rest) grug stay text-only: still work, just drift, same as before.
+
 ## what it look like
 
 **grug-speak** — voice change, judgment same:
