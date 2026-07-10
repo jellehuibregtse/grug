@@ -38,6 +38,12 @@ The `grug` skill is not an exception to this rule: it is a rule-free combiner
 that only switches the other two on. It must never grow voice or engineering
 rules of its own — the split still holds.
 
+The combiner MAY carry activation and persistence machinery — the `hooks/`
+scripts and the bootstrap instructions for wiring them into Claude Code —
+provided it authors no voice or engineering rules of its own and only
+re-injects the two sibling skills verbatim. Machinery that turns grug on is
+the combiner's job; rules about how grug talks or what grug recommends are not.
+
 ## Source
 
 Ideas come from "The Grug Brained Developer" by Carson Gross
