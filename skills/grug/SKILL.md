@@ -52,6 +52,75 @@ would conflict, the voice gives way — clarity and correctness win:
 Active every response once on. Off when the user says "stop grug" or
 "normal mode" — same switches as the sub-skills.
 
+### Making grug persist (Claude Code only)
+
+Loading the skill turns grug on for now, but over a long session — or after
+`/clear` or compaction — the rules drift out of context. In **Claude Code**,
+this skill's `hooks/` folder fixes that: registering two POSIX-sh hooks in
+Claude Code settings re-injects grug's rules at session boundaries and every
+turn, so grug survives. Elsewhere (Cursor, Copilot, and the like) grug stays
+text-only — it still works, it just drifts, same as before. Presence of the
+hooks *is* the on state; there is no flag file.
+
+The two hooks:
+
+- `hooks/grug-session.sh` on `SessionStart` — re-injects the full ruleset
+  (this combiner plus both sibling `SKILL.md` bodies) on startup, resume,
+  clear, and compact.
+- `hooks/grug-turn.sh` on `UserPromptSubmit` — prints a short reminder every
+  turn to keep grug anchored across `/clear` and compaction.
+
+**Before offering to persist**, on `/grug` (or "grug mode") in Claude Code,
+verify all three:
+
+1. The harness is Claude Code. If not, skip persistence — grug is text-only
+   here.
+2. All three skills — `grug`, `grug-speak`, `grug-principles` — are installed
+   at the **same scope**. The session hook resolves its siblings by relative
+   path, so a missing sibling breaks it. If one is missing, do **not** register
+   hooks — say plainly which skill to install first.
+3. The hooks are not already registered — match by the `grug-session.sh` /
+   `grug-turn.sh` command path fingerprint. If present, grug already persists;
+   nothing to do.
+
+**If not yet registered**, ask the user whether to make grug persist, and offer
+only the scope that matches where the skill is installed:
+
+- Project-scope install → write to `.claude/settings.local.json`, hook commands
+  under `$CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/…`.
+- User-scope install → write to `~/.claude/settings.json`, hook commands under
+  `$HOME/.claude/skills/grug/hooks/…`.
+
+Offer only the matching scope. If the user wants the other scope, tell them to
+reinstall the skill there first — do not copy the scripts around.
+
+**On consent**, merge these two entries into any existing `hooks` object (never
+clobber other hooks):
+
+- `SessionStart` → command `<path>/grug-session.sh`
+- `UserPromptSubmit` → command `<path>/grug-turn.sh`
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-session.sh" } ] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [ { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-turn.sh" } ] }
+    ]
+  }
+}
+```
+
+Once registered, grug is on by default every session: `SessionStart` re-injects
+the full ruleset and the turn hook keeps it anchored through `/clear` and
+compaction.
+
+**`/grug off`** — remove exactly the two entries whose command matches the grug
+hook script paths, from whichever settings file they were added to. Leave every
+other hook untouched. No script for this; the agent edits the JSON directly.
+
 ## Not this skill's job
 
 No new engineering opinions, no new voice rules. Everything lives in the two
