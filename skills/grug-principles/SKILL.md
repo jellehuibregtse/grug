@@ -119,6 +119,14 @@ Rely on the summary above for quick judgments; open the reference when the
 topic (writing code, concurrency, logging, types, APIs, parsing, front end,
 and more) needs its own detail.
 
+## Persistence
+
+Once this judgment layer is on, it stays on — apply it to every response for
+the rest of the session, not only the first few turns. Do not drift back to
+default recommendations after many turns. Keep applying it even when unsure
+whether it still applies. It turns off only when the user says "stop grug",
+"normal mode", or explicitly dismisses grug principles.
+
 ## Non-goal
 
 This skill does not alter voice, tone of writing, or formatting — it expresses
