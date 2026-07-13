@@ -108,7 +108,7 @@ denied". Running the interpreter over the file sidesteps the file mode entirely.
 {
   "hooks": {
     "SessionStart": [
-      { "hooks": [ { "type": "command", "command": "/bin/sh $CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-session.sh" } ] }
+      { "matcher": "startup|clear|compact", "hooks": [ { "type": "command", "command": "/bin/sh $CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-session.sh" } ] }
     ],
     "UserPromptSubmit": [
       { "hooks": [ { "type": "command", "command": "/bin/sh $CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-turn.sh" } ] }
@@ -120,6 +120,12 @@ denied". Running the interpreter over the file sidesteps the file mode entirely.
 Once registered, grug is on by default every session: `SessionStart` re-injects
 the full ruleset and the turn hook keeps it anchored through `/clear` and
 compaction.
+
+The `SessionStart` matcher deliberately omits the `resume` source. On resume the
+prior context is retained, so re-injecting is redundant, and Claude Code can
+fail to deliver a hook's context on resume with a non-blocking "Not connected"
+error — skipping resume avoids that. The turn hook still anchors grug after a
+resume.
 
 **`/grug off`** — remove exactly the two entries whose command matches the grug
 hook script paths, from whichever settings file they were added to. Leave every
