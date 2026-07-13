@@ -97,17 +97,21 @@ reinstall the skill there first — do not copy the scripts around.
 **On consent**, merge these two entries into any existing `hooks` object (never
 clobber other hooks):
 
-- `SessionStart` → command `<path>/grug-session.sh`
-- `UserPromptSubmit` → command `<path>/grug-turn.sh`
+- `SessionStart` → command `/bin/sh <path>/grug-session.sh`
+- `UserPromptSubmit` → command `/bin/sh <path>/grug-turn.sh`
+
+Invoke through `/bin/sh`, not the script path alone: `gh skill install` does not
+preserve the executable bit, so a bare-path command fails with "Permission
+denied". Running the interpreter over the file sidesteps the file mode entirely.
 
 ```json
 {
   "hooks": {
     "SessionStart": [
-      { "hooks": [ { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-session.sh" } ] }
+      { "hooks": [ { "type": "command", "command": "/bin/sh $CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-session.sh" } ] }
     ],
     "UserPromptSubmit": [
-      { "hooks": [ { "type": "command", "command": "$CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-turn.sh" } ] }
+      { "hooks": [ { "type": "command", "command": "/bin/sh $CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-turn.sh" } ] }
     ]
   }
 }
