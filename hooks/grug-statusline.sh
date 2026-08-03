@@ -1,6 +1,6 @@
 #!/bin/sh
-# Optional statusline badge: renders [GRUG] while grug is on, nothing while it
-# is off. Wire it up in settings.json:
+# Optional statusline badge: renders 🪨 while grug is on, nothing while it is
+# off. Wire it up in settings.json:
 #
 #   "statusLine": { "type": "command", "command": "sh /path/to/grug-statusline.sh" }
 #
@@ -14,4 +14,4 @@ FLAG="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/.grug-active"
 [ -L "$FLAG" ] && exit 0
 [ -f "$FLAG" ] || exit 0
 
-printf '\033[38;5;172m[GRUG]\033[0m'
+printf '🪨'
