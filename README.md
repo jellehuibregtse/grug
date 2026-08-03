@@ -23,24 +23,49 @@ installed.
 
 ## install
 
-need `gh` >= 2.90.0. one command, then pick skill from interactive list:
+two way. pick one, not both — else you get skill twice.
+
+**Claude Code: install as plugin.** this the way grug stick.
+
+```
+/plugin marketplace add jellehuibregtse/grug
+/plugin install grug@grug
+```
+
+**anywhere else: install as skill.** need `gh` >= 2.90.0. one command, then
+pick skill from interactive list:
 
 ```sh
 gh skill install jellehuibregtse/grug
 ```
 
-then say "talk like grug" (voice), "grug review" (philosophy), or "grug mode" /
-/grug (both).
+either way, say "talk like grug" (voice), "grug review" (philosophy), or "grug
+mode" / /grug (both).
 
 ## make grug stick (Claude Code only)
 
-grug fade over long session, or after `/clear` or compaction. in Claude Code,
-grug fix this: two small hook re-inject grug rule at session start and every
-turn, so grug survive. opt-in — grug ask before touch your settings, never
-wire itself. once wired, presence of hook mean grug on by default every
-session; say `/grug off` to remove hook. need all three skill — grug,
-grug-speak, grug-principles — installed at same scope. everywhere else (Cursor,
-Copilot, rest) grug stay text-only: still work, just drift, same as before.
+grug fade over long session, or after `/clear` or compaction. plugin fix this
+with three hook, no setting for you to edit:
+
+| hook               | when                                          | what |
+|--------------------|-----------------------------------------------|------|
+| `SessionStart`     | startup, resume, `/clear`, compact, fork      | re-inject whole ruleset — combiner plus both sibling skill |
+| `UserPromptSubmit` | every turn                                    | short anchor line, so grug not drift between session boundary |
+| `SubagentStart`    | every spawned subagent                        | same anchor — session context never reach subagent otherwise |
+
+say "stop grug" or "normal mode" (whole message, nothing else) and grug go
+quiet till next session. say "grug mode" or `/grug` and grug come back. want
+plugin installed but grug off by default? set `GRUG_DEFAULT=off`.
+
+want badge in statusline? add to `settings.json`:
+
+```json
+{ "statusLine": { "type": "command", "command": "sh ~/.claude/plugins/marketplaces/grug/hooks/grug-statusline.sh" } }
+```
+
+hook are POSIX sh, so Windows need Git Bash or WSL. skill-only install
+(`gh skill install`) stay text-only everywhere: still work, just drift, same as
+before.
 
 ## what it look like
 
