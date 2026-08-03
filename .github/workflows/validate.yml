@@ -16,3 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: gh skill publish --dry-run
+      - name: Install Claude Code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - name: Validate plugins and marketplace
+        run: claude plugin validate .
+      - name: Check hook syntax
+        run: sh -n hooks/*.sh
