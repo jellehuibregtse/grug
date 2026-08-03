@@ -1,0 +1,13 @@
+{
+  "name": "grug",
+  "description": "Full grug brained developer mode that sticks: caveman voice plus complexity-averse engineering judgment, re-injected at every session boundary and every turn so it never fades out of context.",
+  "author": {
+    "name": "Jelle Huibregtse",
+    "url": "https://github.com/jellehuibregtse"
+  },
+  "homepage": "https://github.com/jellehuibregtse/grug",
+  "repository": "https://github.com/jellehuibregtse/grug",
+  "license": "MIT",
+  "keywords": ["grug", "voice", "simplicity", "code-review", "complexity"],
+  "hooks": "./hooks/hooks.json"
+}

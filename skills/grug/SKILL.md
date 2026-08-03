@@ -55,75 +55,31 @@ Active every response once on. Off when the user says "stop grug" or
 ### Making grug persist (Claude Code only)
 
 Loading the skill turns grug on for now, but over a long session — or after
-`/clear` or compaction — the rules drift out of context. In **Claude Code**,
-this skill's `hooks/` folder fixes that: registering two POSIX-sh hooks in
-Claude Code settings re-injects grug's rules at session boundaries and every
-turn, so grug survives. Elsewhere (Cursor, Copilot, and the like) grug stays
-text-only — it still works, it just drifts, same as before. Presence of the
-hooks *is* the on state; there is no flag file.
+`/clear` or compaction — the rules drift out of context. Installing this repo
+as a **Claude Code plugin** fixes that. The plugin's hooks re-inject grug at
+every session boundary, on every turn, and into every subagent, so it never
+fades:
 
-The two hooks:
-
-- `hooks/grug-session.sh` on `SessionStart` — re-injects the full ruleset
-  (this combiner plus both sibling `SKILL.md` bodies) on startup, resume,
-  clear, and compact.
-- `hooks/grug-turn.sh` on `UserPromptSubmit` — prints a short reminder every
-  turn to keep grug anchored across `/clear` and compaction.
-
-**Before offering to persist**, on `/grug` (or "grug mode") in Claude Code,
-verify all three:
-
-1. The harness is Claude Code. If not, skip persistence — grug is text-only
-   here.
-2. All three skills — `grug`, `grug-speak`, `grug-principles` — are installed
-   at the **same scope**. The session hook resolves its siblings by relative
-   path, so a missing sibling breaks it. If one is missing, do **not** register
-   hooks — say plainly which skill to install first.
-3. The hooks are not already registered — match by the `grug-session.sh` /
-   `grug-turn.sh` command path fingerprint. If present, grug already persists;
-   nothing to do.
-
-**If not yet registered**, ask the user whether to make grug persist, and offer
-only the scope that matches where the skill is installed:
-
-- Project-scope install → write to `.claude/settings.local.json`, hook commands
-  under `$CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/…`.
-- User-scope install → write to `~/.claude/settings.json`, hook commands under
-  `$HOME/.claude/skills/grug/hooks/…`.
-
-Offer only the matching scope. If the user wants the other scope, tell them to
-reinstall the skill there first — do not copy the scripts around.
-
-**On consent**, merge these two entries into any existing `hooks` object (never
-clobber other hooks):
-
-- `SessionStart` → command `/bin/sh <path>/grug-session.sh`
-- `UserPromptSubmit` → command `/bin/sh <path>/grug-turn.sh`
-
-Invoke through `/bin/sh`, not the script path alone: `gh skill install` does not
-preserve the executable bit, so a bare-path command fails with "Permission
-denied". Running the interpreter over the file sidesteps the file mode entirely.
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      { "hooks": [ { "type": "command", "command": "/bin/sh $CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-session.sh" } ] }
-    ],
-    "UserPromptSubmit": [
-      { "hooks": [ { "type": "command", "command": "/bin/sh $CLAUDE_PROJECT_DIR/.claude/skills/grug/hooks/grug-turn.sh" } ] }
-    ]
-  }
-}
+```
+/plugin marketplace add jellehuibregtse/grug
+/plugin install grug@grug
 ```
 
-Once registered, grug is on by default every session: `SessionStart` re-injects
-the full ruleset and the turn hook keeps it anchored through `/clear` and
-compaction.
+Installing the plugin is the whole setup: there is nothing to wire by hand and
+nothing for you to offer, and grug is on from the next session onward. If the
+user asks how to make grug stick, point them at those two commands. Never edit
+their settings yourself.
 
-**`/grug off`** — remove exactly the two entries whose command matches the grug
-hook script paths, from whichever settings file they were added to. Leave every
-other hook untouched. No script for this; the agent edits the JSON directly.
+Everywhere else (Cursor, Copilot, and the like, or a plain
+`gh skill install`) grug stays text-only. It still works, it just drifts, same
+as before.
+
+**On and off with the plugin installed**: "stop grug" or "normal mode" as the
+whole message turns grug off until the next session; "grug mode" or `/grug`
+turns it back on. Both are the hooks' doing — you do not need to track the
+state yourself, only honour whatever the injected context says. Set
+`GRUG_DEFAULT=off` to keep the plugin installed but start every session
+normal.
 
 ## Not this skill's job
 

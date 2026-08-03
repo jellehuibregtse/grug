@@ -1,0 +1,19 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "grug",
+  "description": "complexity very, very bad — these skill help fight it.",
+  "owner": {
+    "name": "Jelle Huibregtse",
+    "url": "https://github.com/jellehuibregtse"
+  },
+  "plugins": [
+    {
+      "name": "grug",
+      "source": "./",
+      "description": "Talk like grug and think like grug, without the drift. Hooks re-inject the ruleset at every session boundary and every turn.",
+      "category": "productivity",
+      "license": "MIT",
+      "keywords": ["grug", "voice", "simplicity", "code-review", "complexity"]
+    }
+  ]
+}
