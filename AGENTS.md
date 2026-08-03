@@ -5,9 +5,16 @@ This repository ships Agent Skills, one per folder under `skills/`, each a
 installable with `gh skill install jellehuibregtse/grug/<skill-name>` and
 vendorable into a project's `.claude/skills/` or `.agents/skills/`.
 
+The same tree is also a Claude Code plugin (and a one-entry marketplace), so
+Claude Code users get the skills plus the hooks that keep grug from drifting.
+Both install paths read the same `skills/` folder — never fork the skill text
+for one of them.
+
 ## Layout
 
 - One skill per folder: `skills/<skill-name>/SKILL.md`. Flat, no categories.
+- Plugin manifests live in `.claude-plugin/` and nothing else does. Hooks live
+  in `hooks/` at the repo root, where Claude Code expects them.
 - The folder name must equal the frontmatter `name`, lowercase and
   hyphen-separated (`^[a-z0-9]+(-[a-z0-9]+)*$`).
 - Deep detail lives in a `references/` subfolder inside the skill, linked from
@@ -38,11 +45,16 @@ The `grug` skill is not an exception to this rule: it is a rule-free combiner
 that only switches the other two on. It must never grow voice or engineering
 rules of its own — the split still holds.
 
-The combiner MAY carry activation and persistence machinery — the `hooks/`
-scripts and the bootstrap instructions for wiring them into Claude Code —
-provided it authors no voice or engineering rules of its own and only
-re-injects the two sibling skills verbatim. Machinery that turns grug on is
-the combiner's job; rules about how grug talks or what grug recommends are not.
+Activation and persistence machinery lives in the plugin, not in the skills:
+`hooks/` holds the scripts, and the combiner's `SKILL.md` only points at them.
+The machinery may re-inject the two sibling skills verbatim and switch grug on
+and off; it must never author a voice or engineering rule of its own. Turning
+grug on is the plugin's job; deciding how grug talks or what grug recommends
+is not.
+
+The hooks are POSIX `sh`, dependency-free, and always exit 0 — a broken grug
+must never break someone's session. `anchor.txt` is interpolated straight into
+a JSON string, so it stays one line with no quote and no backslash.
 
 ## Source
 
